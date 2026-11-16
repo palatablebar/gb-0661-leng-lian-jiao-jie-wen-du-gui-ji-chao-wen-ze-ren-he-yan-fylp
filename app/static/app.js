@@ -12,3 +12,4 @@ document.getElementById('run').addEventListener('click',()=>{
  request('/api/runs',{sample:document.getElementById('sample').value,...(raw?{csv_text:raw}:{}),threshold:document.getElementById('threshold')?.value||'8',max_gap:Number(document.getElementById('gap')?.value||15)});
 });
 document.getElementById('review')?.addEventListener('click',event=>{if(state.busy)return;const b=event.currentTarget;b.disabled=true;request('/api/batches/review',{run_id:b.dataset.run,version:Number(b.dataset.version)});});
+document.getElementById('correct')?.addEventListener('click',event=>{if(state.busy)return;event.currentTarget.disabled=true;request('/api/corrections',{probe:document.getElementById('c-probe').value,offset:document.getElementById('c-offset').value,start:document.getElementById('c-start').value,end:document.getElementById('c-end').value,note:document.getElementById('c-note').value});});

@@ -11,9 +11,10 @@ def connect():
 def save(bundle):
     rid=bundle['manifest']['run_id']
     with connect() as c:
-        c.execute('INSERT OR IGNORE INTO runs(id,payload,created) VALUES(?,?,?)',(rid,json.dumps(bundle,ensure_ascii=False),bundle['manifest']['created_at']))
+        cur=c.execute('INSERT OR IGNORE INTO runs(id,payload,created) VALUES(?,?,?)',(rid,json.dumps(bundle,ensure_ascii=False),bundle['manifest']['created_at']))
+        reused=cur.rowcount==0
         row=c.execute('SELECT * FROM runs WHERE id=?',(rid,)).fetchone()
-    out=json.loads(row['payload']);out['version']=row['version'];out['reviewed']=bool(row['reviewed'])
+    out=json.loads(row['payload']);out['version']=row['version'];out['reviewed']=bool(row['reviewed']);out['reused']=reused
     return out
 
 def latest():
